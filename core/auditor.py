@@ -197,7 +197,6 @@ class AuditManager:
             "--dump-all",
             "--threads=5",
             "--random-agent",
-            "--color=off",
             "--flush-session",
             f"--output-dir={self.output_dir}"
         ]
