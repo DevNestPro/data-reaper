@@ -1,6 +1,5 @@
 /* ============================================
-   VULNAUDIT WARFARE — PHOSPHOR TERMINAL
-   With Data-Reaper Credential Dump Tables
+   DATA-REAPER v3 — AUTONOMOUS PHOSPHOR THEME
    ============================================ */
 
 :root {
@@ -462,6 +461,46 @@ body {
 @keyframes srFlicker {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.2; }
+}
+
+/* ============================================
+   DISCOVERED VECTORS LIST
+   ============================================ */
+
+.discovered-list {
+    max-height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.discovered-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.discovered-list::-webkit-scrollbar-thumb {
+    background: var(--border);
+}
+
+.discovered-empty {
+    color: #1a3a25;
+    font-style: italic;
+    font-size: 0.8rem;
+    padding: 8px 0;
+    text-align: center;
+}
+
+.discovered-item {
+    font-size: 0.78rem;
+    color: var(--amber);
+    padding: 4px 6px;
+    border-left: 2px solid var(--amber);
+    background: rgba(255, 170, 0, 0.04);
+    word-break: break-all;
+    font-family: var(--font);
+    text-shadow: 0 0 3px rgba(255, 170, 0, 0.2);
+    animation: tIn 0.15s ease-out;
 }
 
 /* ============================================

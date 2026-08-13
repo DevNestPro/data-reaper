@@ -1,6 +1,5 @@
 /**
- * VULNAUDIT WARFARE — Terminal Controller
- * With Data-Reaper Credential Dump Renderer
+ * DATA-REAPER v3 — Autonomous Frontend Controller
  */
 
 (function() {
@@ -22,16 +21,18 @@
     const threatText  = $('threat-text');
     const cursorRow   = $('term-cursor-row');
     const dumpArea    = $('data-dump-area');
+    const discList    = $('discovered-list');
 
     let isScanning = false;
     let pollInterval = null;
     let elapsedInterval = null;
     let scanStartTime = null;
     let lastOutputIndex = 0;
+    let lastDiscoveredCount = 0;
 
     const STATES = {
         'IDLE':           { text: 'IDLE',          sub: 'Standby mode engaged',      ring: 'sr-idle',              color: '#1a1a1a',  threat: 'MINIMAL' },
-        'SCANNING':       { text: 'SCANNING',      sub: 'Active enumeration',        ring: 'sr-scanning',          color: '#ffaa00',  threat: 'ELEVATED' },
+        'SCANNING':       { text: 'SCANNING',      sub: 'Autonomous pipeline active',ring: 'sr-scanning',          color: '#ffaa00',  threat: 'ELEVATED' },
         'VULNERABLE':     { text: 'VULNERABLE',    sub: 'Exploit vector confirmed',  ring: 'sr-vulnerable',        color: '#ff003c',  threat: 'CRITICAL' },
         'NOT_VULNERABLE': { text: 'HARDENED',      sub: 'No vectors detected',       ring: 'sr-not-vulnerable',    color: '#00ff41',  threat: 'NONE' },
         'ERROR':          { text: 'ERROR',         sub: 'Execution failure',         ring: 'sr-error',             color: '#ff003c',  threat: 'UNKNOWN' },
@@ -48,13 +49,9 @@
     function bindEvents() {
         launchBtn.addEventListener('click', startAudit);
         stopBtn.addEventListener('click', stopAudit);
-        clearBtn.addEventListener('click', clearTerm);
+        clearBtn.addEventListener('click', clearAll);
         targetInput.addEventListener('keypress', e => { if (e.key === 'Enter') startAudit(); });
     }
-
-    // ============================================
-    // API
-    // ============================================
 
     async function checkHealth() {
         try {
@@ -92,10 +89,9 @@
                     data.output.forEach(l => log(l.type || 'normal', l.text, l.timestamp));
                     lastOutputIndex = data.output.length;
                 }
-                if (data.extracted_data?.length) {
-                    renderDump(data.extracted_data);
-                }
-                log('system', '[*] Reconnected to active audit session.');
+                if (data.discovered_urls?.length) renderDiscovered(data.discovered_urls);
+                if (data.extracted_data?.length) renderDump(data.extracted_data);
+                log('system', '[*] Reconnected to active autonomous session.');
                 startPoll();
                 startTimer();
             }
@@ -106,15 +102,15 @@
 
     async function startAudit() {
         const url = targetInput.value.trim();
-        if (!url) { log('error', '[!] Enter target URL.'); return; }
+        if (!url) { log('error', '[!] Enter target domain or IP.'); return; }
         if (!url.startsWith('http://') && !url.startsWith('https://')) {
             log('error', '[!] Protocol required: http:// or https://'); return;
         }
 
-        clearTerm();
-        clearDump();
+        clearAll();
         isScanning = true;
         lastOutputIndex = 0;
+        lastDiscoveredCount = 0;
         scanStartTime = Date.now();
 
         setUI(true);
@@ -122,8 +118,8 @@
         targetDisp.textContent = url.toUpperCase();
         cursorRow.style.display = 'flex';
 
-        log('system', `[*] Initializing vector: ${url}`);
-        log('system', '[*] Handing off to sqlmap engine...');
+        log('system', `[*] Autonomous scan initiated: ${url}`);
+        log('system', '[*] Phase 1: Reconnaissance (crawler deployment)...');
 
         try {
             const res = await fetch('/api/start_audit', {
@@ -167,10 +163,6 @@
         }
     }
 
-    // ============================================
-    // POLLING
-    // ============================================
-
     function startPoll() {
         if (pollInterval) clearInterval(pollInterval);
         pollInterval = setInterval(pollStatus, 2000);
@@ -193,7 +185,11 @@
                 lastOutputIndex = data.output.length;
             }
 
-            // Render extracted credential data when available
+            if (data.discovered_urls?.length > lastDiscoveredCount) {
+                renderDiscovered(data.discovered_urls);
+                lastDiscoveredCount = data.discovered_urls.length;
+            }
+
             if (data.extracted_data?.length > 0) {
                 renderDump(data.extracted_data);
             }
@@ -203,10 +199,10 @@
                 resetUI();
 
                 if (data.status === 'VULNERABLE') {
-                    log('critical', '[!] THREAT CONFIRMED: SQL injection vector successful.');
-                    log('critical', '[!] Database enumeration complete. Immediate patch required.');
+                    log('critical', '[!] THREAT CONFIRMED: Autonomous exploitation successful.');
+                    log('critical', '[!] Database credentials extracted. Immediate patch required.');
                 } else if (data.status === 'NOT_VULNERABLE') {
-                    log('success', '[*] Target hardened. No injectable parameters found.');
+                    log('success', '[*] Target hardened. No injectable vectors found in tested scope.');
                 } else if (data.status === 'ERROR') {
                     log('error', '[!] Operation terminated with errors.');
                 } else {
@@ -218,16 +214,21 @@
         }
     }
 
-    // ============================================
-    // DATA DUMP RENDERER
-    // ============================================
+    function renderDiscovered(urls) {
+        if (!urls || urls.length === 0) return;
+        discList.innerHTML = '';
+        urls.forEach(u => {
+            const item = document.createElement('div');
+            item.className = 'discovered-item';
+            item.textContent = u;
+            discList.appendChild(item);
+        });
+    }
 
     function renderDump(tables) {
         if (!tables || tables.length === 0) return;
-
         dumpArea.innerHTML = '';
-
-        tables.forEach((table, idx) => {
+        tables.forEach(table => {
             const container = document.createElement('div');
             container.className = 'dump-table-wrap';
 
@@ -247,8 +248,6 @@
 
             const tbl = document.createElement('table');
             tbl.className = 'dump-table';
-
-            // Header
             const thead = document.createElement('thead');
             const hr = document.createElement('tr');
             Object.keys(table.rows[0]).forEach(col => {
@@ -259,7 +258,6 @@
             thead.appendChild(hr);
             tbl.appendChild(thead);
 
-            // Body
             const tbody = document.createElement('tbody');
             table.rows.forEach(row => {
                 const tr = document.createElement('tr');
@@ -271,19 +269,10 @@
                 tbody.appendChild(tr);
             });
             tbl.appendChild(tbody);
-
             container.appendChild(tbl);
             dumpArea.appendChild(container);
         });
     }
-
-    function clearDump() {
-        dumpArea.innerHTML = '<div class="dump-empty">No data extracted yet.</div>';
-    }
-
-    // ============================================
-    // UI HELPERS
-    // ============================================
 
     function setStatus(key) {
         const s = STATES[key] || STATES['IDLE'];
@@ -325,9 +314,11 @@
         return d.innerHTML;
     }
 
-    function clearTerm() {
+    function clearAll() {
         terminal.innerHTML = '';
-        log('system', '[*] Buffer purged.');
+        dumpArea.innerHTML = '<div class="dump-empty">No data extracted yet.</div>';
+        discList.innerHTML = '<div class="discovered-empty">No vectors discovered yet.</div>';
+        log('system', '[*] All buffers purged.');
     }
 
     function startTimer() {

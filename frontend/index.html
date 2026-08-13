@@ -3,42 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>root@exploit:~# ./audit --live</title>
+    <title>root@exploit:~# ./reaper --autonomous</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="war-shell">
     
-    <!-- CRT Overlay FX -->
     <div class="crt-overlay"></div>
     <div class="crt-flicker"></div>
 
-    <!-- Header -->
     <header class="war-header">
         <div class="h-brand">
             <span class="h-skull">☠</span>
             <span class="h-title">VULN<span class="h-blood">AUDIT</span></span>
-            <span class="h-ver">v2.0.1-kali</span>
+            <span class="h-ver">v3.0-AUTONOMOUS</span>
         </div>
         <div class="h-ops">
             <span class="h-pill h-live">● UPLINK ACTIVE</span>
-            <span class="h-pill h-warn">⚠ UNAUTHORIZED ACCESS IS A FELONY</span>
+            <span class="h-pill h-warn">⚠ AUTHORIZED RED TEAM ONLY</span>
         </div>
     </header>
 
-    <!-- Main War Room -->
     <div class="war-room">
         
-        <!-- LEFT: Command & Control -->
         <aside class="war-ctrl">
             
             <div class="wbox">
-                <div class="wbox-hd">[ TARGET_VECTOR ]</div>
+                <div class="wbox-hd">[ TARGET_DOMAIN ]</div>
                 <div class="wbox-bd">
                     <div class="cmdline">
                         <span class="cmd-prompt">root@kali:~$</span>
-                        <input type="text" id="target-url" class="cmd-input" placeholder="http://target.com/page.php?id=1" autocomplete="off" spellcheck="false">
+                        <input type="text" id="target-url" class="cmd-input" placeholder="Enter Target Domain or IP" autocomplete="off" spellcheck="false">
                         <span class="cmd-cursor">_</span>
                     </div>
                 </div>
@@ -50,7 +46,7 @@
                     <div class="btn-stack">
                         <button id="launch-btn" class="war-btn war-go">
                             <span class="wb-icon">▶</span>
-                            <span class="wb-txt">EXECUTE_PAYLOAD</span>
+                            <span class="wb-txt">EXECUTE_SCAN</span>
                         </button>
                         <button id="stop-btn" class="war-btn war-kill" disabled>
                             <span class="wb-icon">◼</span>
@@ -80,8 +76,8 @@
                         <span class="tele-v">5</span>
                     </div>
                     <div class="tele-row">
-                        <span class="tele-k">PAYLOAD_TYPE</span>
-                        <span class="tele-v">--dump-all</span>
+                        <span class="tele-k">MODE</span>
+                        <span class="tele-v">AUTONOMOUS</span>
                     </div>
                     <div class="tele-row">
                         <span class="tele-k">THREAT_LVL</span>
@@ -103,12 +99,20 @@
                 </div>
             </div>
 
+            <div class="wbox">
+                <div class="wbox-hd">[ DISCOVERED_VECTORS ]</div>
+                <div class="wbox-bd">
+                    <div class="discovered-list" id="discovered-list">
+                        <div class="discovered-empty">No vectors discovered yet.</div>
+                    </div>
+                </div>
+            </div>
+
         </aside>
 
-        <!-- RIGHT: Terminal Output -->
         <main class="war-term">
             <div class="term-bar">
-                <span class="tb-title">root@audit:~# sqlmap --dump-all --live --batch</span>
+                <span class="tb-title">root@audit:~# ./reaper --crawl --detect --dump --autonomous</span>
                 <span class="tb-btns">
                     <span class="tbx r"></span>
                     <span class="tbx y"></span>
@@ -118,15 +122,15 @@
             <div class="term-body" id="terminal">
                 <div class="t-row t-sys">
                     <span class="t-ts">--:--:--</span>
-                    <span class="t-tx">[*] Initializing exploit framework...</span>
+                    <span class="t-tx">[*] Autonomous exploit framework initialized.</span>
                 </div>
                 <div class="t-row t-sys">
                     <span class="t-ts">--:--:--</span>
-                    <span class="t-tx">[*] sqlmap API bridge established.</span>
+                    <span class="t-tx">[*] Pipeline: CRAWL → DETECT → EXPLOIT → EXTRACT</span>
                 </div>
                 <div class="t-row t-sys">
                     <span class="t-ts">--:--:--</span>
-                    <span class="t-tx">[*] Waiting for target vector. Enter URL and EXECUTE.</span>
+                    <span class="t-tx">[*] Enter target domain and EXECUTE_SCAN to begin.</span>
                 </div>
             </div>
             <div class="term-input" id="term-cursor-row">
@@ -137,7 +141,6 @@
 
     </div>
 
-    <!-- Data Extraction Panel -->
     <section class="war-extract">
         <div class="wbox">
             <div class="wbox-hd">[ EXTRACTED_CREDENTIALS ]</div>
@@ -149,9 +152,8 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="war-footer">
-        <span>// VULNAUDIT FRAMEWORK // KALI LINUX // AUTHORIZED RED TEAM OPS ONLY //</span>
+        <span>// DATA-REAPER v3.0 // AUTONOMOUS PIPELINE // KALI LINUX // AUTHORIZED ONLY //</span>
         <span id="target-display">NO_ACTIVE_TARGET</span>
     </footer>
 
