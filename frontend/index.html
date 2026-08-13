@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>root@exploit:~# ./audit --live</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="war-shell">
+    
+    <!-- CRT Overlay FX -->
+    <div class="crt-overlay"></div>
+    <div class="crt-flicker"></div>
+
+    <!-- Header -->
+    <header class="war-header">
+        <div class="h-brand">
+            <span class="h-skull">☠</span>
+            <span class="h-title">VULN<span class="h-blood">AUDIT</span></span>
+            <span class="h-ver">v2.0.1-kali</span>
+        </div>
+        <div class="h-ops">
+            <span class="h-pill h-live">● UPLINK ACTIVE</span>
+            <span class="h-pill h-warn">⚠ UNAUTHORIZED ACCESS IS A FELONY</span>
+        </div>
+    </header>
+
+    <!-- Main War Room -->
+    <div class="war-room">
+        
+        <!-- LEFT: Command & Control -->
+        <aside class="war-ctrl">
+            
+            <div class="wbox">
+                <div class="wbox-hd">[ TARGET_VECTOR ]</div>
+                <div class="wbox-bd">
+                    <div class="cmdline">
+                        <span class="cmd-prompt">root@kali:~$</span>
+                        <input type="text" id="target-url" class="cmd-input" placeholder="http://target.com/page.php?id=1" autocomplete="off" spellcheck="false">
+                        <span class="cmd-cursor">_</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wbox">
+                <div class="wbox-hd">[ FIRE_CONTROL ]</div>
+                <div class="wbox-bd">
+                    <div class="btn-stack">
+                        <button id="launch-btn" class="war-btn war-go">
+                            <span class="wb-icon">▶</span>
+                            <span class="wb-txt">EXECUTE_PAYLOAD</span>
+                        </button>
+                        <button id="stop-btn" class="war-btn war-kill" disabled>
+                            <span class="wb-icon">◼</span>
+                            <span class="wb-txt">KILL_PROCESS</span>
+                        </button>
+                        <button id="clear-btn" class="war-btn war-clr">
+                            <span class="wb-icon">✕</span>
+                            <span class="wb-txt">PURGE_LOGS</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wbox">
+                <div class="wbox-hd">[ TELEMETRY ]</div>
+                <div class="wbox-bd">
+                    <div class="tele-row">
+                        <span class="tele-k">ENGINE_STATE</span>
+                        <span class="tele-v" id="sqlmap-text">OFFLINE</span>
+                    </div>
+                    <div class="tele-row">
+                        <span class="tele-k">TIME_ELAPSED</span>
+                        <span class="tele-v tele-mono" id="elapsed-time">00:00:00</span>
+                    </div>
+                    <div class="tele-row">
+                        <span class="tele-k">THREAD_POOL</span>
+                        <span class="tele-v">5</span>
+                    </div>
+                    <div class="tele-row">
+                        <span class="tele-k">PAYLOAD_TYPE</span>
+                        <span class="tele-v">--dump-all</span>
+                    </div>
+                    <div class="tele-row">
+                        <span class="tele-k">THREAT_LVL</span>
+                        <span class="tele-v" id="threat-text">MINIMAL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wbox wbox-status">
+                <div class="wbox-hd">[ SYSTEM_STATUS ]</div>
+                <div class="wbox-bd">
+                    <div class="status-war">
+                        <div class="sw-ring" id="status-ring"></div>
+                        <div class="sw-info">
+                            <div class="sw-state" id="status-text">IDLE</div>
+                            <div class="sw-sub" id="status-sub">Standby mode engaged</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- RIGHT: Terminal Output -->
+        <main class="war-term">
+            <div class="term-bar">
+                <span class="tb-title">root@audit:~# sqlmap --dump-all --live --batch</span>
+                <span class="tb-btns">
+                    <span class="tbx r"></span>
+                    <span class="tbx y"></span>
+                    <span class="tbx g"></span>
+                </span>
+            </div>
+            <div class="term-body" id="terminal">
+                <div class="t-row t-sys">
+                    <span class="t-ts">--:--:--</span>
+                    <span class="t-tx">[*] Initializing exploit framework...</span>
+                </div>
+                <div class="t-row t-sys">
+                    <span class="t-ts">--:--:--</span>
+                    <span class="t-tx">[*] sqlmap API bridge established.</span>
+                </div>
+                <div class="t-row t-sys">
+                    <span class="t-ts">--:--:--</span>
+                    <span class="t-tx">[*] Waiting for target vector. Enter URL and EXECUTE.</span>
+                </div>
+            </div>
+            <div class="term-input" id="term-cursor-row">
+                <span class="ti-prompt">root@audit:~$</span>
+                <span class="ti-cursor">_</span>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- Data Extraction Panel -->
+    <section class="war-extract">
+        <div class="wbox">
+            <div class="wbox-hd">[ EXTRACTED_CREDENTIALS ]</div>
+            <div class="wbox-bd">
+                <div id="data-dump-area" class="dump-area">
+                    <div class="dump-empty">No data extracted yet.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="war-footer">
+        <span>// VULNAUDIT FRAMEWORK // KALI LINUX // AUTHORIZED RED TEAM OPS ONLY //</span>
+        <span id="target-display">NO_ACTIVE_TARGET</span>
+    </footer>
+
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
