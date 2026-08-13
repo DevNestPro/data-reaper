@@ -18,7 +18,8 @@ sys.path.insert(0, BASE_DIR)
 
 from core.auditor import AuditManager
 
-app = Flask(__name__, static_folder=FRONTEND_DIR)
+# YAHAN static_url_path='' ADD KIYA GAYA HAI JISSE CSS/JS LOAD HONGE
+app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path='')
 
 # Initialize the audit manager
 audit_manager = AuditManager()
@@ -28,12 +29,6 @@ audit_manager = AuditManager()
 def index():
     """Serve the main dashboard."""
     return send_from_directory(FRONTEND_DIR, 'index.html')
-
-
-@app.route('/frontend/<path:filename>')
-def serve_static(filename):
-    """Serve static frontend assets."""
-    return send_from_directory(FRONTEND_DIR, filename)
 
 
 @app.route('/api/start_audit', methods=['POST'])
